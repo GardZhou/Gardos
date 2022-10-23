@@ -75,6 +75,55 @@ setup_page:
     mov esi,0
 .clear_page_dir:
     mov byte [PAGE_DIR_TABLE_POS+esi],0
+    inc esi
+    loop .clear_page_dir
+
+;开始创建页目录项(PDE)
+.create_pde:  ;创建page directory entry
+    mov eax,PAGE_DIR_TABLE_POS
+    add eax,0x1000  ;此时eax为第一个页表的位置及属性
+    mov ebx,eax     ;此处为ebx赋值，是为.create_pde做准备，ebx为基址
+
+;下面将页目录项0和0xc00都存为第一个页表的地址，每个页表表示4MB内存
+;这样0xc03fffff以下的地址和0x003fffff以下的地址都将指向相同的页表
+;这是为将地址映射为内核地址做准备
+    or eax,PG_US_U|PG_RW_W|PG_P
+    ;页目录项的属性RW和P位置1,US为1,表示用户属性,所有特权级别都可以访问
+    mov [PAGE_DIR_TABLE_POS + 0xc00],eax
+
+;一个页表占用四个字节
+    ;0xc00表示第768个页表占用的目录项,0xc00以上的目录项用于内核空间
+    ;页表的0xc0000000-0xffffffff共计1G属于内核
+    ;0x0-0xbfffffff共计3G属于用户进程
+    sub eax,0x1000
+    mov [PAGE_DIR_TABLE_POS+4092],eax
+;使最后一个目录项指向页目录表自己的地址
+
+;下面创建页表项PTE
+    mov ecx,256     ;1M低端内存 每页大小4k=256
+    mov esi,0
+    mov edx, PG_US_U|PG_RW_W|PG_P  ;属性为7 US=1,RW-1,P=1
+.create_pte:
+    mov [ebx+esi*4],edx
+    add edx,4096
+    inc esi
+    loop .create_pte
+
+;创建内核其他页表的PDE
+    mov eax,PAGE_DIR_TABLE_POS
+    add eax,0x2000  ;此时eax为第二个页表的位置
+    or eax,PG_US_U|PG_RW_W|PG_P
+    mov ebx,PAGE_DIR_TABLE_POS
+    mov ecx,254     ;范围为769-1022的所有目录项数量
+    mov esi,769
+.create_kernel_pde:
+    mov [ebx+esi*4],eax
+    inc esi
+    add eax,0x1000
+    loop .create_kernel_pde
+    ret
+
+
 
 
 ; mov byte [gs:0x00], '2'
