@@ -5,9 +5,7 @@ LOADER_START_SECTOR equ 0x2
 PAGE_DIR_TABLE_POS equ 0x100000
 
 ;-------------加载内核----------------------
-KERNEL_START_SECTOR equ 0x9
-KERNEL_BIN_BASE_ADDR equ 0x70000
-KERNEL_ENTRY_POINT equ 0xc0001500
+
 
 ;------------- gdt描述符属性 -------------------
 DESC_G_4K equ 1_00000000000000000000000b
