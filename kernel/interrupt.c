@@ -73,9 +73,29 @@ static void general_intr_handler(uint8_t vec_nr) {
         //0x2f是从片0x8259A上的最后一个IRQ引脚，保留项
         return ;
     }
-    put_str("int vector : 0x");
-    put_int(vec_nr);
-    put_char('\n');
+    set_cursor(0);
+    int cursor_pos = 0;
+    while(cursor_pos < 320) {
+        put_char(' ');
+        cursor_pos++;
+    }
+
+    set_cursor(0);      //重置光标为左上角
+    put_str("!      excetion message begin      \n");
+    put_str(intr_name[vec_nr]);
+    if (vec_nr == 14) {    //若为pagefault,打印缺失地址并暂停
+        int page_fault_vaddr = 0;
+        asm ("movl %%cr2, %0" : "=r" (page_fault_vaddr));   //cr2是存放造成pagefault的地址
+        put_str("\npage fault addr is ");put_str(page_fault_vaddr);
+    }
+    put_str("!      excetion message end      \n");
+    //能进入中断处理程序就说明已经关中断
+    //不会中断死循环
+    while(1);
+}
+
+void register_handler(uint8_t vector_no, intr_handler function) {
+    idt_table[vector_no] = function;
 }
 
 static void exception_init(void) {

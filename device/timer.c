@@ -1,6 +1,7 @@
 #include "timer.h"
 #include "io.h"
 #include "print.h"
+#include "thread.h"
 
 #define IRQ0_FREQUENCY 100
 #define INPUT_FREQUENCY 1193180
@@ -26,6 +27,23 @@ static void frequency_set(uint8_t counter_port, \
     //再写入高8位
     outb(counter_port, (uint8_t)(counter_value >> 8));       
 }
+
+uint32_t ticks=0;
+// 时钟的中断处理函数
+static void intr_timer_handler(void) {
+   task_struct* cur_thread = running_thread();
+
+   ASSERT(cur_thread -> stack_magic == 0x19870916); // 检查栈是否溢出
+
+   cur_thread -> elapsed_ticks++; // 记录此线程占用处理器的总时间数
+   ticks++; // 用户态和内核态的总时间数
+
+   if(cur_thread -> ticks == 0) // 若线程的时间片用完了就开始调度新的进程上处理器
+      schedule();
+   else // 将当前线程的时间片 -1
+      cur_thread -> ticks--;
+}
+
 
 /* 初始化PIT8253 */
 void timer_init(void) {
