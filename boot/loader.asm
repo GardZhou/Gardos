@@ -175,7 +175,7 @@ setup_page:
 ;------------------将kernel.bin中的segment拷贝到编译的地址-----------------
 kernel_init:
     xor eax,eax
-    xor,ebx,ebx     ;ebx记录程序头表地址
+    xor ebx,ebx     ;ebx记录程序头表地址
     xor ecx,ecx     ;cx记录程序头表中的program header 数量
     xor edx,edx     ;dx记录program header尺寸,即e_phentsize
 
@@ -192,7 +192,7 @@ kernel_init:
 .each_segment:
     cmp byte [ebx+0],PT_NULL
         ;若p_byte=PT_NULL 说明此program header为使用
-    je .PT_NULL
+    je .PTNULL
     
     ;Wei memcpy压入参数 从右往左依次压入
     ;函数原型类似于memcpy(dst,src,size)
@@ -207,9 +207,9 @@ kernel_init:
     push dword [ebx+8]
         ;偏移程序头8字节的位置是p_vaddr
     call mem_cpy
-    add esp.12
+    add esp, 12
 
-.PT_NULL:
+.PTNULL:
     add ebx,edx
         ;edx为程序头大小即E_phensize
         ;在此ebx指向下一个程序头
@@ -244,37 +244,37 @@ rd_disk_m_32:
         ;设置要读取的扇区数
         mov edx,0x1f2
         mov cl,al
-        out edx,al
+        out 0x1f2,al
 
         mov eax,esi
 
         ;存入LBA地址到端口0x1f3-0x1f6
         mov edx,0x1f3
-        out edx,al
+        out 0x1f3,al
 
         mov cl,8
         shr eax,cl
         mov edx,0x1f4
-        out edx,al
+        out 0x1f4,al
 
         mov edx,0x1f5
         shr eax,cl
-        out edx,al
+        out 0x1f5,al
 
         mov edx,0x1f6
         shr eax,cl      
         and al,0x0f     ;lba第24-27位
         or al,0xe0      ;设置 7-4位为1110,表示lba模式
-        out edx,al
+        out 0x1f6,al
 
         mov edx,0x1f7   ;向0x1f7端口写入读命令,0x20
         mov al,0x20
-        out edx,al
+        out 0x1f7,al
 
     ;检测硬盘状态
     .not_ready:
         nop
-        in al,edx
+        in al,0x1f7
         and al,0x88 ;第三位为1代表硬盘控制器已准备好数据传输
                     ;第7位为1代表硬盘忙
         cmp al,0x08
@@ -288,7 +288,7 @@ rd_disk_m_32:
         mov edx,0x1f0
 
     .go_on_read:
-        in eax,edx
+        in eax,0x1f0
         mov [ebx],eax
         add ebx,2
         loop .go_on_read
