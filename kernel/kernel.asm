@@ -5,13 +5,14 @@
                             ;为了统一栈中格式，就手工压入一个0
 
 extern put_str;
+extern idt_table;
 
 section .data 
 intr_str db "interrupt occur!",0xa,0
 global intr_entry_table
 intr_entry_table:
 
-#macro VECTOR 2
+%macro VECTOR 2
 section .text
 intr%1entry:                ;每个中断处理程序都要压入中断向量号
                             ;所以一个中断类型一个中断处理程序
@@ -43,7 +44,7 @@ intr%1entry:                ;每个中断处理程序都要压入中断向量号
 section .data 
     dd intr%1entry          ;存储各个中断入口程序的地址
                             ;形成intr_entry_table数组
-#endmacro
+%endmacro
 
 section .text
 global intr_exit
@@ -90,4 +91,4 @@ VECTOR  0x1c,ZERO
 VECTOR  0x1d,ZERO 
 VECTOR  0x1e,ERROR_CODE 
 VECTOR  0x1f,ZERO 
-VECTOR  0x20,ZERO 
+VECTOR  0x20,ZERO

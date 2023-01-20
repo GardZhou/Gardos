@@ -9,14 +9,14 @@ void idt_init(void);
     INTR_OFF
     INTR_ON
  */
-typedef enum intr_status_e {
+typedef enum intr_status {
     INTR_OFF,
     INTR_ON 
 }intr_status;
 
 intr_status intr_get_status(void);
 intr_status intr_set_status(intr_status);
-intr_handler intr_enable(void);
-intr_handler intr_disable(void);
+intr_status intr_enable(void);
+intr_status intr_disable(void);
 
 #endif

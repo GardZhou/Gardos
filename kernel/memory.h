@@ -1,5 +1,6 @@
 #ifndef __KERNEL_MEMORY_H
 #define __KERNEL_MEMORY_H
+#include "global.h"
 #include "stdint.h"
 #include "bitmap.h"
 

@@ -46,7 +46,7 @@ char* strcpy(char* dst_, const char* src_) {
 uint32_t strlen(const char* str) {
     ASSERT(str != NULL);
     const char* p = str;
-    while(*P++);
+    while(*p++);
     return (p - str - 1);
 }
 
@@ -55,7 +55,7 @@ int8_t strcmp(const char* a, const char* b) {
     ASSERT(a != NULL && b != NULL);
     while(*a != 0 && *a == *b) {
         a++;
-        b++:
+        b++;
     }
     return *a < *b ? -1 : *a > *b;
 }

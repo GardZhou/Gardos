@@ -46,7 +46,7 @@ static void pic_init(void) {
     outb (PIC_M_DATA, 0xfe);
     outb (PIC_S_DATA, 0xff);
 
-    put_str("   pic_init done\n")
+    put_str("   pic_init done\n");
 }
 
 
@@ -132,7 +132,7 @@ static void exception_init(void) {
 }
 
 //开中断，并返回开中断前的状态
-intr_status intr_enable() {
+intr_status intr_enable(void) {
     intr_status old_status;
     if (INTR_ON == intr_get_status()) {
         old_status = INTR_ON;
@@ -145,7 +145,7 @@ intr_status intr_enable() {
 }
 
 //关中断,并且返回关中断前的状态
-intr_status intr_disable() {
+intr_status intr_disable(void) {
     intr_status old_status;
     if (INTR_ON == intr_get_status()) {
         old_status = INTR_ON;

@@ -2,7 +2,6 @@
 #include "stdint.h"
 #include "print.h"
 #include "bitmap.h"
-#include "global.h"
 #include "string.h"
 #include "debug.h"
 
@@ -34,7 +33,7 @@ virtual_addr kernel_vaddr;
 
 /* 在pf表示的虚拟内存池中申请pg_cnt个虚拟页 
  * 成功返回虚拟页起始地址，失败返回NULL */
-static void vaddr_get(enum pool_flags pf, uint32_t pg_cnt) {
+static void* vaddr_get(enum pool_flags pf, uint32_t pg_cnt) {
     int vaddr_start = 0, bit_idx_start = -1;
     uint32_t cnt = 0;
     if(pf == PF_KERNEL) {

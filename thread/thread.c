@@ -4,6 +4,7 @@
 #include "memory.h"
 #include "list.h"
 #include "interrupt.h"
+#include "debug.h"
 
 #define PG_SIZE 4096
 
