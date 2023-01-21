@@ -15,6 +15,7 @@ int main(){
     // put_int((uint32_t vaddr));
     // put_str("\n");
 
+
     thread_start("k_a", 31, k_a, "argA");
     thread_start("k_b", 8, k_b, "argB");
     

@@ -170,7 +170,7 @@ intr_status intr_get_status() {
 }
 
 //完成有关中断的所有初始化工作
-void idt_init() {
+void idt_init(void) {
     put_str("idt_init start\n");
     idt_desc_init();
     exception_init();   //异常名初始化并注册通常的中断处理函数

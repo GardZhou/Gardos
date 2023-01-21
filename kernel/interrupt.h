@@ -18,5 +18,6 @@ intr_status intr_get_status(void);
 intr_status intr_set_status(intr_status);
 intr_status intr_enable(void);
 intr_status intr_disable(void);
+void idt_init(void);
 
 #endif

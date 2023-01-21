@@ -1,7 +1,6 @@
 AS = nasm
 ASFLAGS = -I include/ 
 
-
 ./mbr.bin: mbr.asm
 	$(AS) $(ASFLAGS) $^ -o $@
 ./loader.bin: loader.asm
@@ -17,7 +16,7 @@ hd:
 
 	dd if=./loader.bin \
 		of=/home/gming/bochs/hd60M.img \
-		bs=512 count=1 seek=2 conv=notrunc
+		bs=512 count=4 seek=2 conv=notrunc
 
 
 build:./mbr.bin  ./loader.bin

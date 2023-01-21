@@ -58,8 +58,8 @@ uint32_t* pte_ptr(uint32_t vaddr) {
      * 再用页目录项pde（页目录内页表的索引）作为pte的索引访问到页表 + \
      * 再用pte的索引作为页内偏移 */
     uint32_t* pte = (uint32_t*)(0xffc00000 + \
-    ((vaddr & 0xffc00000) >> 10) + \
-    PTE_IDX(vaddr) * 4);
+        ((vaddr & 0xffc00000) >> 10) + \
+        PTE_IDX(vaddr) * 4);
     return pte;
 }
 
@@ -85,8 +85,8 @@ static void* palloc(pool* m_pool) {
 
 /* 页表中添加虚拟地址vaddr和物理地址page_ohyaddr */
 static void page_table_add(void* _vaddr, void* _page_phyaddr) {
-    uint32_t vaddr = (uint32_t*)_vaddr;
-    uint32_t page_phyaddr = _page_phyaddr;
+    uint32_t vaddr = (uint32_t)_vaddr;
+    uint32_t page_phyaddr = (uint32_t)_page_phyaddr;
     uint32_t* pde = pde_ptr(vaddr);
     uint32_t* pte = pte_ptr(vaddr);
 
@@ -104,7 +104,7 @@ static void page_table_add(void* _vaddr, void* _page_phyaddr) {
     } else { //目录项不存在。所以要先创建页目录项再创建页表项
         /* 页表用到的页框一律从内核空间先分配 */
         uint32_t pde_phyaddr = (uint32_t)palloc(&kernel_pool);
-        *pde = (page_phyaddr | PG_US_U | PG_RW_W | PG_P_1);
+        *pde = (pde_phyaddr | PG_US_U | PG_RW_W | PG_P_1);
         /* 分配到的物理页地址pde_phyaddr对应的物理内存清0
          * 避免里面的陈旧数据变成了页表项
          * 访问到pde对应的物理地址, 用pte取高20位即可
@@ -230,8 +230,8 @@ static void mem_pool_init(uint32_t all_mem) {
 }
 
 /* 内核管理部分初始化入口 */
-void mem_init() {
-    put_str("mem_inti start\n");
+void mem_init(void) {
+    put_str("mem_init start\n");
     uint32_t mem_bytes_total = (*(uint32_t*)(0xb00));
     mem_pool_init(mem_bytes_total);
     put_str("mem_init done\n");

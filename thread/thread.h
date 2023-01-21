@@ -90,5 +90,6 @@ typedef struct task_struct {
     uint32_t stack_magic;       //栈的边界标记，用于检测栈的溢出
 }task_struct;
 
+void thread_init(void);
 
 #endif
