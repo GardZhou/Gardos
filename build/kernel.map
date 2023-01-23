@@ -196,7 +196,7 @@ LOAD build/thread.o
 .plt.sec
  *(.plt.sec)
 
-.text           0x00000000c0001500     0x23d4
+.text           0x00000000c0001500     0x23df
  *(.text.unlikely .text.*_unlikely .text.unlikely.*)
  *(.text.exit .text.exit.*)
  *(.text.startup .text.startup.*)
@@ -271,16 +271,16 @@ LOAD build/thread.o
                 0x00000000c00031a3                bitmap_scan_test
                 0x00000000c00031f1                bitmap_scan
                 0x00000000c000333d                bitmap_set
- .text          0x00000000c0003409      0x4c7 build/thread.o
+ .text          0x00000000c0003409      0x4d2 build/thread.o
                 0x00000000c0003409                running_thread
-                0x00000000c0003451                thread_create
-                0x00000000c00034d9                init_thread
-                0x00000000c0003582                thread_start
-                0x00000000c0003682                schedule
-                0x00000000c0003867                thread_init
+                0x00000000c000345c                thread_create
+                0x00000000c00034e4                init_thread
+                0x00000000c000358d                thread_start
+                0x00000000c000368d                schedule
+                0x00000000c0003872                thread_init
  .text.__x86.get_pc_thunk.dx
-                0x00000000c00038d0        0x4 build/thread.o
-                0x00000000c00038d0                __x86.get_pc_thunk.dx
+                0x00000000c00038db        0x4 build/thread.o
+                0x00000000c00038db                __x86.get_pc_thunk.dx
  *(.gnu.warning)
 
 .fini
@@ -314,7 +314,7 @@ LOAD build/thread.o
  *(.eh_frame_hdr)
  *(.eh_frame_entry .eh_frame_entry.*)
 
-.eh_frame       0x00000000c0004770      0x8b0
+.eh_frame       0x00000000c0004770      0x8b4
  *(.eh_frame)
  .eh_frame      0x00000000c0004770       0x8c build/main.o
  .eh_frame      0x00000000c00047fc       0x24 build/init.o
@@ -333,8 +333,8 @@ LOAD build/thread.o
                                         0x188 (size before relaxing)
  .eh_frame      0x00000000c0004e68       0x90 build/bitmap.o
                                          0xbc (size before relaxing)
- .eh_frame      0x00000000c0004ef8      0x128 build/thread.o
-                                        0x168 (size before relaxing)
+ .eh_frame      0x00000000c0004ef8      0x12c build/thread.o
+                                        0x16c (size before relaxing)
  *(.eh_frame.*)
 
 .gcc_except_table
