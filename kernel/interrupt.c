@@ -1,5 +1,5 @@
 #include "interrupt.h"
-#include "stdint.h"
+#include "print.h"
 #include "global.h"
 #include "io.h"
 
@@ -127,7 +127,7 @@ static void exception_init(void) {
     //intr_name[15]是intel保留项,未使用
     intr_name[16] = "#MF x87 FPU Floating-Point Error";
     intr_name[17] = "#AC Alignment Check Exception";
-    intr_name[18] = "MC Machine-Check Exception";
+    intr_name[18] = "#MC Machine-Check Exception";
     intr_name[19] = "#XF SIMD Floating-Point Exception";
 }
 

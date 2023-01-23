@@ -18,7 +18,7 @@ OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/init.o $(BUILD_DIR)/interrupt.o \
 ########			c代码编译			###############
 $(BUILD_DIR)/main.o: kernel/main.c lib/kernel/print.h \
 						lib/stdint.h kernel/init.h kernel/memory.h \
-						thread/thread.h
+						thread/thread.h kernel/interrupt.h
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/init.o: kernel/init.c kernel/init.h lib/kernel/print.h \
@@ -31,7 +31,8 @@ $(BUILD_DIR)/interrupt.o: kernel/interrupt.c kernel/interrupt.h \
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/timer.o: device/timer.c device/timer.h lib/stdint.h \
-						lib/kernel/io.h lib/kernel/print.h kernel/debug.h
+						lib/kernel/io.h lib/kernel/print.h kernel/debug.h \
+						kernel/interrupt.h
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/debug.o: kernel/debug.c kernel/debug.h lib/kernel/print.h \

@@ -4,11 +4,11 @@
 %define ZERO push 0         ;若在相关的异常中CPU没有压入错误码
                             ;为了统一栈中格式，就手工压入一个0
 
-extern put_str;
+;extern put_str;
 extern idt_table;
 
 section .data 
-intr_str db "interrupt occur!",0xa,0
+;intr_str db "interrupt occur!",0xa,0
 global intr_entry_table
 intr_entry_table:
 
@@ -50,7 +50,7 @@ section .text
 global intr_exit
 intr_exit:
 ;以下是恢复上下文环境
-    add esp,4               ;跨过中断号
+    add esp, 4               ;跨过中断号
     popad
     pop gs
     pop fs

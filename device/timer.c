@@ -1,6 +1,7 @@
 #include "timer.h"
 #include "io.h"
 #include "print.h"
+#include "interrupt.h"
 #include "thread.h"
 #include "debug.h"
 
@@ -9,7 +10,7 @@
 #define COUNTER0_VALUE INPUT_FREQUENCY / IRQ0_FREQUENCY
 #define COUNTER0_PORT 0x40
 #define COUNTER0_NO 0
-#define COUNTER0_MDOE 2
+#define COUNTER_MODE 2
 #define READ_WRITE_LATCH 3
 #define PIT_CONTROL_PORT 0x43
 
@@ -53,7 +54,8 @@ void timer_init(void) {
     frequency_set(COUNTER0_PORT, \
                     COUNTER0_NO, \
                     READ_WRITE_LATCH, \
-                    COUNTER0_MDOE, \
+                    COUNTER_MODE, \
                     COUNTER0_VALUE);
+    register_handler(0x20, intr_timer_handler);
     put_str("timer_init done\n");
 }
