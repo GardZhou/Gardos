@@ -3,7 +3,7 @@
 #include "global.h"
 #include "io.h"
 
-#define IDT_DESC_CNT 0x21 //目前总共支持的中断数
+#define IDT_DESC_CNT 0x30 //目前总共支持的中断数
 #define PIC_M_CTRL 0x20
 #define PIC_M_DATA 0x21
 #define PIC_S_CTRL 0xa0
@@ -43,7 +43,8 @@ static void pic_init(void) {
     outb (PIC_S_DATA, 0x02);
     outb (PIC_S_DATA, 0x01);
 
-    outb (PIC_M_DATA, 0xfe);
+ /* 只打开时钟和键盘中断，其它全部关闭 */
+    outb (PIC_M_DATA, 0xfc);
     outb (PIC_S_DATA, 0xff);
 
     put_str("   pic_init done\n");

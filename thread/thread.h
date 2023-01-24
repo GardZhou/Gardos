@@ -90,6 +90,9 @@ typedef struct task_struct {
     uint32_t stack_magic;       //栈的边界标记，用于检测栈的溢出
 }task_struct;
 
+task_struct* running_thread(void);
+void thread_block(enum task_status stat);
+void thread_unblock(struct task_struct* pthread);
 void thread_init(void);
 
 #endif
