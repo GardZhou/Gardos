@@ -2,6 +2,8 @@
 #define __THREAD_THREAD_H
 #include "stdint.h"
 #include "list.h"
+#include "bitmap.h"
+#include "memory.h"
 
 /* 自定义通用函数类型, 在很多线程函数中作为形参类型 */
 typedef void thread_func(void*);
@@ -39,7 +41,7 @@ typedef struct intr_stack {
 
     /* 以下由cpu从低特权级进入高特权级时压入 */
     uint32_t error_code;        //error_code会在eip之后被压入
-    uint32_t (*eip) (void);
+    void (*eip) (void);
     uint32_t cs;
     uint32_t eflags;
     void* esp;
@@ -87,12 +89,21 @@ typedef struct task_struct {
     list_elem all_list_tag;
 
     uint32_t pgdir;             //进程自己虚拟页表的地址
+    struct virtual_addr userprog_vaddr;   // 用户进程的虚拟地址
     uint32_t stack_magic;       //栈的边界标记，用于检测栈的溢出
 }task_struct;
 
+extern struct list thread_ready_list;
+extern struct list thread_all_list;
+
 task_struct* running_thread(void);
+void init_thread(struct task_struct* pthread, char* name, int prio);
+void schedule(void);
+
 void thread_block(enum task_status stat);
 void thread_unblock(struct task_struct* pthread);
 void thread_init(void);
+void thread_create(task_struct* pthread, thread_func function, void* func_arg);
+task_struct* thread_start(char* name, int prio, thread_func function, void* func_arg);
 
 #endif
