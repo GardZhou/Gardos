@@ -74,7 +74,7 @@ struct thread_stack {
 };
 
 /* 进程或线程的pcb,程序控制块 */
-typedef struct task_struct {
+struct task_struct {
    uint32_t* self_kstack;	 // 各内核线程都用自己的内核栈
    pid_t pid;
    enum task_status status;
@@ -97,7 +97,7 @@ typedef struct task_struct {
    struct mem_block_desc u_block_desc[DESC_CNT];   // 用户进程内存块描述符
 
    uint32_t stack_magic;	 // 用这串数字做栈的边界标记,用于检测栈的溢出
-}task_struct;
+};
 
 
 extern struct list thread_ready_list;
@@ -111,4 +111,5 @@ void schedule(void);
 void thread_init(void);
 void thread_block(enum task_status stat);
 void thread_unblock(struct task_struct* pthread);
+void thread_yield(void);
 #endif

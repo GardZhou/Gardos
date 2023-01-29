@@ -40,3 +40,4 @@ void console_put_int(uint32_t num) {
    put_int(num); 
    console_release();
 }
+
