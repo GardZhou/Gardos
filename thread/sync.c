@@ -22,14 +22,14 @@ void sema_down(struct semaphore* psema) {
 /* 关中断来保证原子操作 */
    enum intr_status old_status = intr_disable();
    while(psema->value == 0) {	// 若value为0,表示已经被别人持有
-        ASSERT(!elem_find(&psema->waiters, &running_thread()->general_tag));
-        /* 当前线程不应该已在信号量的waiters队列中 */
-        if (elem_find(&psema->waiters, &running_thread()->general_tag)) {
-            PANIC("sema_down: thread blocked has been in waiters_list\n");
-        }
+      ASSERT(!elem_find(&psema->waiters, &running_thread()->general_tag));
+      /* 当前线程不应该已在信号量的waiters队列中 */
+      if (elem_find(&psema->waiters, &running_thread()->general_tag)) {
+	 PANIC("sema_down: thread blocked has been in waiters_list\n");
+      }
 /* 若信号量的值等于0,则当前线程把自己加入该锁的等待队列,然后阻塞自己 */
-        list_append(&psema->waiters, &running_thread()->general_tag); 
-        thread_block(TASK_BLOCKED);    // 阻塞线程,直到被唤醒
+      list_append(&psema->waiters, &running_thread()->general_tag); 
+      thread_block(TASK_BLOCKED);    // 阻塞线程,直到被唤醒
    }
 /* 若value为1或被唤醒后,会执行下面的代码,也就是获得了锁。*/
    psema->value--;
@@ -79,3 +79,4 @@ void lock_release(struct lock* plock) {
    plock->holder_repeat_nr = 0;
    sema_up(&plock->semaphore);	   // 信号量的V操作,也是原子操作
 }
+
